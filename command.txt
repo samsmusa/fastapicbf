@@ -1,0 +1,6 @@
+pipenv install sqlacodegen
+sqlacodegen mysql+mysqlconnector://root:root@localhost:3306/cbf --outfile db.py
+pipenv install omymodels
+--omm db.sql
+--omm db.sql -m sqlalchemy
+--omm .\cbf_schema.sql -t schema.py  -m pydantic
