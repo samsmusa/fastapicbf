@@ -94,10 +94,26 @@ async def read_item(skill: schema.FilterSkill, db: Session = Depends(get_databas
 #         count += 1
 #     print(f'Start processing a request from client: {client_id}')
 #     return {}
+#  .query(Customer).join(Invoice).filter(Invoice.amount == 8500)
+
+
+from sqlalchemy import text
+from typing import List
+
+
+@app.get('/youth/', response_model=List[schema.FilterYouthSkill])
+async def youth(request: Request, db: Session = Depends(get_database_session)):
+    query = text('SELECT * FROM filter_youth_skill')
+    # youths = db.query(models.FilterYouthSkill).all()
+    youths = db.execute(query)
+    print(youths)
+    # youths = db.execute(text('SELECT * from filter_youth'))
+    return youths
 
 
 @app.post('/job/')
-async def job(request: Request, jobschema=Depends(schema.FilterJob.as_form), db: Session = Depends(get_database_session)):
+async def job(request: Request, jobschema=Depends(schema.FilterJob.as_form),
+              db: Session = Depends(get_database_session)):
     # async def job(job: schema.FilterJob, db: Session = Depends(get_database_session)):
     job = models.FilterJob(**jobschema.dict())
     # db.add(job)

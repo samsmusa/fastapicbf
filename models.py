@@ -7,14 +7,6 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 metadata = Base.metadata
 
-from sqlalchemy import Table
-
-FilterYouthSkill = Table(
-    'filter_youth_skill',
-    Base.metadata, Column("youth_id", ForeignKey('filter_youth.id'), primary_key=True),
-    Column("skill_id", ForeignKey('filter_skill.id'), primary_key=True)
-)
-
 
 class AuthGroup(Base):
     __tablename__ = 'auth_group'
@@ -104,11 +96,6 @@ class FilterYouth(Base):
     name = Column(String(50))
     education_label = Column(String(100), nullable=False)
     education_field = Column(String(100), nullable=False)
-    skills = relationship(
-        "FilterSkill",
-        secondary=FilterYouthSkill,
-        back_populates="youth_skill"
-    )
 
 
 class AuthPermission(Base):
@@ -176,11 +163,6 @@ class FilterSkill(Base):
     type_id = Column(ForeignKey('filter_skilltype.id'), nullable=False, index=True)
 
     type = relationship('FilterSkilltype')
-    filteryouth = relationship(
-        "FilterYouth",
-        secondary=FilterYouthSkill,
-        back_populates="skill_youth"
-    )
 
 
 class FilterYouthprofile(Base):
@@ -234,16 +216,16 @@ class FilterJobSkill(Base):
     job = relationship('FilterJob')
     skill = relationship('FilterSkill')
 
-#
-# class FilterYouthSkill(Base):
-#     __tablename__ = 'filter_youth_skill'
-#     __table_args__ = (
-#         Index('filter_youth_skill_youth_id_skill_id_be4fae76_uniq', 'youth_id', 'skill_id', unique=True),
-#     )
-#
-#     id = Column(BigInteger, primary_key=True)
-#     youth_id = Column(ForeignKey('filter_youth.id'), nullable=False)
-#     skill_id = Column(ForeignKey('filter_skill.id'), nullable=False, index=True)
-#
-#     skill = relationship('FilterSkill')
-#     youth = relationship('FilterYouth')
+
+class FilterYouthSkill(Base):
+    __tablename__ = 'filter_youth_skill'
+    __table_args__ = (
+        Index('filter_youth_skill_youth_id_skill_id_be4fae76_uniq', 'youth_id', 'skill_id', unique=True),
+    )
+
+    id = Column(BigInteger, primary_key=True)
+    youth_id = Column(ForeignKey('filter_youth.id'), nullable=False)
+    skill_id = Column(ForeignKey('filter_skill.id'), nullable=False, index=True)
+
+    skill = relationship('FilterSkill')
+    youth = relationship('FilterYouth')

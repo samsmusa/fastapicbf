@@ -146,6 +146,9 @@ class FilterSkill(BaseModel):
     skill: Optional[str]
     type_id: int
 
+    class Config:
+        orm_mode = True
+
 
 class FilterJobSkill(BaseModel):
     id: int
@@ -163,7 +166,10 @@ class FilterYouth(BaseModel):
 class FilterYouthSkill(BaseModel):
     id: int
     youth_id: int
-    skill_id: int
+    skill: FilterSkill | None = None
+
+    class Config:
+        orm_mode = True
 
 
 class FilterYouthprofile(BaseModel):
