@@ -1,4 +1,5 @@
 # pip install contractions
+import numpy as np
 import pandas as pd
 import contractions
 import re
@@ -154,3 +155,19 @@ def generate_token(desc):
             tokens.add(j)
 
     return tokens
+
+
+def cos_similarity(arr1, arr2):
+    print(len(arr1), len(arr2))
+    if len(arr1) != len(arr2):
+        if len(arr1) > len(arr2):
+            arr2 = np.pad(arr2, (0, len(arr1) - len(arr2)), 'constant', constant_values=0)
+            print(len(arr1), len(arr2))
+        else:
+            arr1 = np.pad(arr1, (0, len(arr2) - len(arr1)), 'constant', constant_values=0)
+            print(len(arr1), len(arr2))
+    ans = np.dot(arr1, arr2) / (np.linalg.norm(arr1) * np.linalg.norm(arr2))
+    if np.isnan(ans):
+        return 0
+    else:
+        return ans
