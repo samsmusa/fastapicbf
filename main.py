@@ -110,11 +110,11 @@ async def job(request: Request, jobschema=Depends(schema.FilterJob.as_form), db:
     for skill in db.query(models.FilterSkill).all():
         if skill.skill.lower() in tokens:
             skills.append(1)
-            job.skill.add(skill)
+            job.skill.append(skill)
         else:
             skills.append(0)
-    JobSkill = job.skill.all()
-    print(JobSkill)
+    # JobSkill = job.skill.all()
+    print(job)
     # for skill in models.Skill.objects.all():
     #     if skill in JobSkill:
     #         skills.append(1)
